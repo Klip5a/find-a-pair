@@ -1,0 +1,4 @@
+<resources>
+    <dimen name="margin_between_cards">8dp</dimen>
+    <dimen name="card_size">64dp</dimen>
+</resources>

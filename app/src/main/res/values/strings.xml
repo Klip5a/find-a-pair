@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Find a Pair</string>
+    <string name="backButton">Назад</string>
+    <string name="easyButton">Легко</string>
+    <string name="mediumButton">Средне</string>
+    <string name="hardButton">Сложно</string>
+    <string name="expertButton">Эксперт</string>
+    <string name="restartButton">Сыграть ещё раз</string>
+    <string name="time_left">Осталось времени: %1$d сек.</string>
+    <string name="congratulations_message">Поздравляем, вы выиграли!</string>
+    <string name="timerDisplay">Сыграть ещё раз</string>
+</resources>
