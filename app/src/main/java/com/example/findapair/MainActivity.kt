@@ -9,8 +9,16 @@ import android.widget.Button
 import android.widget.GridLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.yandex.mobile.ads.common.AdError
 import kotlin.math.floor
 import kotlin.random.Random
+import com.yandex.mobile.ads.common.AdRequestConfiguration
+import com.yandex.mobile.ads.common.AdRequestError
+import com.yandex.mobile.ads.common.ImpressionData
+import com.yandex.mobile.ads.interstitial.InterstitialAd
+import com.yandex.mobile.ads.interstitial.InterstitialAdLoader
+import com.yandex.mobile.ads.interstitial.InterstitialAdLoadListener
+import com.yandex.mobile.ads.interstitial.InterstitialAdEventListener
 
 class MainActivity : AppCompatActivity() {
 
@@ -30,6 +38,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var timer: CountDownTimer
     private var timeInSeconds = 30
     private var pairCount = 0
+    private var interstitialAd: InterstitialAd? = null
+    private var interstitialAdLoader: InterstitialAdLoader? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +52,7 @@ class MainActivity : AppCompatActivity() {
         gameMessage = findViewById(R.id.gameMessage)
         timerDisplay = findViewById(R.id.timerDisplay)
         backButton = findViewById(R.id.backButton)
+
 
         // Инициализация кнопок выбора сложности
         val easyButton: Button = findViewById(R.id.easyButton)
@@ -64,8 +75,68 @@ class MainActivity : AppCompatActivity() {
         // Установка слушателя для кнопки "Назад"
         backButton.setOnClickListener { returnToMainMenu() }
 
+        // Инициализация рекламы
+        initAds()
 
+        // Загрузка межстраничного объявления
+        loadInterstitialAd()
     }
+
+    private fun initAds() {
+        interstitialAdLoader = InterstitialAdLoader(this).apply {
+            setAdLoadListener(object : InterstitialAdLoadListener {
+                override fun onAdLoaded(interstitialAd: InterstitialAd) {
+                    this@MainActivity.interstitialAd = interstitialAd
+                    // Реклама успешно загружена. Теперь вы можете показать загруженное объявление.
+                }
+
+                override fun onAdFailedToLoad(adRequestError: AdRequestError) {
+                    // Ошибка загрузки рекламы с AdRequestError.
+                    // Попытка загрузки новой рекламы из метода onAdFailedToLoad() крайне не рекомендуется.
+                }
+            })
+        }
+    }
+
+    private fun loadInterstitialAd() {
+        val adRequestConfiguration = AdRequestConfiguration.Builder("R-M-4054253-2").build()
+        interstitialAdLoader?.loadAd(adRequestConfiguration)
+    }
+
+    // Добавьте метод для показа межстраничного объявления
+    private fun showInterstitialAd() {
+        interstitialAd?.apply {
+            setAdEventListener(object : InterstitialAdEventListener {
+                override fun onAdShown() {
+                    // Вызывается, когда объявление показано
+                }
+
+                override fun onAdFailedToShow(adError: AdError) {
+                    // Вызывается, если произошла ошибка при показе объявления
+                }
+
+                override fun onAdDismissed() {
+                    // Вызывается, когда объявление закрыто
+                    // Освобождаем ресурсы после закрытия объявления
+                    interstitialAd?.setAdEventListener(null)
+                    interstitialAd = null
+
+                    // Теперь вы можете предварительно загрузить следующее межстраничное объявление
+                    loadInterstitialAd()
+                }
+
+                override fun onAdClicked() {
+                    // Вызывается, когда зафиксирован клик по объявлению
+                }
+
+                override fun onAdImpression(impressionData: ImpressionData?) {
+                    // Вызывается при записи впечатления от объявления
+                }
+            })
+            show(this@MainActivity)
+        }
+    }
+
 
     // Метод для обновления отображения таймера
     private fun updateTimerDisplay() {
@@ -277,6 +348,15 @@ class MainActivity : AppCompatActivity() {
         gameMessage.visibility = View.GONE
         timerDisplay.visibility = View.GONE
         backButton.visibility = View.GONE // Скрываем кнопку "Назад" при возвращении в главное меню
+
+        if (interstitialAd != null) {
+            showInterstitialAd()
+        } else {
+            // Ad is not loaded, or interstitialAd is null
+            // You can handle this case based on your application's logic
+            // For example, you might want to load a new interstitial ad or take another action.
+            loadInterstitialAd()
+        }
     }
 
     // Метод для отображения поздравления с завершением игры

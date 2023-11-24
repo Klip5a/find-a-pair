@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Find a Pair</string>
+    <string name="app_name">Pair Up!</string>
     <string name="backButton">Назад</string>
     <string name="easyButton">Легко</string>
     <string name="mediumButton">Средне</string>
