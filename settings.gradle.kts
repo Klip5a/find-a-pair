@@ -13,6 +13,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "FindAPair"
+rootProject.name = "PairUp"
 include(":app")
  

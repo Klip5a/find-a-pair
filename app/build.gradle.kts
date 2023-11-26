@@ -4,15 +4,15 @@ plugins {
 }
 
 android {
-    namespace = "com.example.findapair"
+    namespace = "com.example.pairup"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.findapair"
+        applicationId = "com.example.pairup"
         minSdk = 24
         targetSdk = 34
-        versionCode = 2
-        versionName = "1.1.5"
+        versionCode = 3
+        versionName = "1.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

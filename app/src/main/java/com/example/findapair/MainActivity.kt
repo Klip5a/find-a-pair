@@ -1,4 +1,4 @@
-package com.example.findapair
+package com.example.pairup
 
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -9,6 +9,7 @@ import android.widget.Button
 import android.widget.GridLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.example.pairup.R
 import com.yandex.mobile.ads.common.AdError
 import kotlin.math.floor
 import kotlin.random.Random
@@ -70,6 +71,15 @@ class MainActivity : AppCompatActivity() {
         restartButton.setOnClickListener {
             resetGame()
             hideDialog() // Скрываем диалоговое окно при нажатии "Еще раз"
+
+            if (interstitialAd != null) {
+                showInterstitialAd()
+            } else {
+                // Ad is not loaded, or interstitialAd is null
+                // You can handle this case based on your application's logic
+                // For example, you might want to load a new interstitial ad or take another action.
+                loadInterstitialAd()
+            }
         }
 
         // Установка слушателя для кнопки "Назад"
@@ -99,7 +109,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadInterstitialAd() {
-        val adRequestConfiguration = AdRequestConfiguration.Builder("R-M-4054253-2").build()
+        val adRequestConfiguration = AdRequestConfiguration.Builder("R-M-4054253-4").build()
         interstitialAdLoader?.loadAd(adRequestConfiguration)
     }
 
@@ -228,7 +238,9 @@ class MainActivity : AppCompatActivity() {
 
                 Handler(mainLooper).postDelayed({
                     if (firstCard.tag == secondCard.tag &&
-                        firstCard.findViewById<TextView>(R.id.cardText).text == secondCard.findViewById<TextView>(R.id.cardText).text
+                        firstCard.findViewById<TextView>(R.id.cardText).text == secondCard.findViewById<TextView>(
+                            R.id.cardText
+                        ).text
                     ) {
                         // Карты совпали
                         firstCard.setBackgroundResource(R.drawable.card_button_matched_background)
@@ -349,14 +361,14 @@ class MainActivity : AppCompatActivity() {
         timerDisplay.visibility = View.GONE
         backButton.visibility = View.GONE // Скрываем кнопку "Назад" при возвращении в главное меню
 
-        if (interstitialAd != null) {
-            showInterstitialAd()
-        } else {
-            // Ad is not loaded, or interstitialAd is null
-            // You can handle this case based on your application's logic
-            // For example, you might want to load a new interstitial ad or take another action.
-            loadInterstitialAd()
-        }
+//        if (interstitialAd != null) {
+//            showInterstitialAd()
+//        } else {
+//            // Ad is not loaded, or interstitialAd is null
+//            // You can handle this case based on your application's logic
+//            // For example, you might want to load a new interstitial ad or take another action.
+//            loadInterstitialAd()
+//        }
     }
 
     // Метод для отображения поздравления с завершением игры
@@ -425,12 +437,12 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-            if (matchedCards.size == difficultyToPairCount(difficulty) * 2 || timeInSeconds <= 0) {
+            if (matchedCards.size == pairCount * 2 || timeInSeconds <= 0) {
                 timer.cancel()
                 endGame() // Вызываем endGame() здесь, чтобы скрыть gameContainer
 
-                if (matchedCards.size == difficultyToPairCount(difficulty) * 2) {
-                    // Если все карты собраны, отображаем поздравление
+                if (matchedCards.size == pairCount * 2) {
+                    // Если все пары карт собраны, отображаем поздравление
                     displayCongratulations()
                 }
 
