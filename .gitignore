@@ -13,5 +13,4 @@
 .externalNativeBuild
 .cxx
 local.properties
-# .gitignore
-app.properties
+app/src/main/res/values/secret.xml

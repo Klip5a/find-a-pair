@@ -109,7 +109,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadInterstitialAd() {
-        val adRequestConfiguration = AdRequestConfiguration.Builder("R-M-4054253-4").build()
+        val adRequestConfiguration = AdRequestConfiguration.Builder(getString(R.string.admob_interstitial_ad_unit_id)).build()
         interstitialAdLoader?.loadAd(adRequestConfiguration)
     }
 
